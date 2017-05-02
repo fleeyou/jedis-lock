@@ -233,7 +233,8 @@ public class JedisLock {
      * @return  true if lock owned
      */
     public synchronized boolean isLocked() {
-        return this.lock != null;
+        final Lock lock = Lock.fromString(jedis.get(lockKeyPath));
+        return this.getLockUUID().equals(lock.getUUID()) && !lock.isExpired();
     }
     
     /**
